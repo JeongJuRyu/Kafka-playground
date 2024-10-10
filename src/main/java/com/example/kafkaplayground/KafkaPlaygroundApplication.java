@@ -1,5 +1,6 @@
 package com.example.kafkaplayground;
 
+import com.example.kafkaplayground.producer.ClipProducer;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,8 +16,14 @@ public class KafkaPlaygroundApplication {
 
     }
     @Bean
-    public ApplicationRunner runner(KafkaTemplate<String, String> kafkaTemplate){
-        return args -> kafkaTemplate.send("quickstart-events", "hello-world");
+    public ApplicationRunner runner(ClipProducer clipProducer){
+        return args -> {
+            clipProducer.async("clip3", "Hello, Clip3-async");
+            clipProducer.async("clip3", "Hello, Clip3-async");
+            clipProducer.sync("clip3", "Hello, Clip3-sync");
+            clipProducer.async("clip3", "Hello, Clip3-async");
+            Thread.sleep(1000L);
+        };
     }
 
 }
