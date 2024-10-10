@@ -1,4 +1,4 @@
-package com.example.kafkaplayground;
+package com.example.kafkaplayground.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,8 @@ public class KafkaTopicConfiguration {
     @Bean
     public KafkaAdmin.NewTopics clip2s(){
         return new KafkaAdmin.NewTopics(
-                TopicBuilder.name("clip3").build()
+                TopicBuilder.name("clip3").build(),
+                TopicBuilder.name("clip3-bytes").build()
         );
     }
 

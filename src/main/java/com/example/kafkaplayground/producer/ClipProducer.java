@@ -2,9 +2,9 @@ package com.example.kafkaplayground.producer;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.RoutingKafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -15,6 +15,7 @@ import java.util.concurrent.TimeoutException;
 @RequiredArgsConstructor
 public class ClipProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final RoutingKafkaTemplate routingKafkaTemplate;
 
     public void async(String topic,String message){
         CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, message);
@@ -30,5 +31,13 @@ public class ClipProducer {
         CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, message);
         SendResult<String, String> stringStringSendResult = future.get(10, TimeUnit.SECONDS);
         System.out.println(stringStringSendResult.getProducerRecord().key());
+    }
+
+    public void routingSend(String topic, String message){
+        routingKafkaTemplate.send(topic, message);
+    }
+
+    public void routingSendBytes(String topic, byte[] message){
+        routingKafkaTemplate.send(topic, message);
     }
 }
