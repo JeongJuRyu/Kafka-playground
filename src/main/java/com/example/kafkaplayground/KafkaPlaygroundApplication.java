@@ -1,10 +1,13 @@
 package com.example.kafkaplayground;
 
+import com.example.kafkaplayground.model.Animal;
+import com.example.kafkaplayground.model.CreateOrderDto;
 import com.example.kafkaplayground.producer.ClipProducer;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 
 import java.nio.charset.StandardCharsets;
 
@@ -17,13 +20,10 @@ public class KafkaPlaygroundApplication {
 
     }
     @Bean
-    public ApplicationRunner runner(ClipProducer clipProducer){
+    public ApplicationRunner runner(ClipProducer clipProducer, KafkaMessageListenerContainer<String, String> kafkaMessageListenerContainer
+    ){
         return args -> {
-            clipProducer.async("clip3", "Hello, Clip3-async");
-            clipProducer.sync("clip3", "Hello, Clip3-sync");
-            clipProducer.routingSend("clip3", "Hello, Clip3-routing");
-            clipProducer.routingSendBytes("clip3-bytes", "Hello, Clip3-bytes".getBytes(StandardCharsets.UTF_8));
-            Thread.sleep(1000L);
+            clipProducer.async("order.create-order", new CreateOrderDto("ryu", 2));
         };
     }
 
